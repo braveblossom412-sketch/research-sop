@@ -1,0 +1,37 @@
+{
+  "records": [
+    {
+      "id": "demo-001",
+      "title": "示例文献（待核实）",
+      "authors": "待核实",
+      "year": "2023",
+      "journal": "待核实",
+      "doi": "待核实",
+      "abstract": "占位摘要，非真实文献，待替换为可溯源样本。",
+      "source": "待核实",
+      "status": "pending"
+    },
+    {
+      "id": "demo-002",
+      "title": "示例缺 DOI（待核实）",
+      "authors": "待核实",
+      "year": "2021",
+      "journal": "待核实",
+      "doi": null,
+      "abstract": "占位，用于验证缺 DOI 边界。",
+      "source": "待核实",
+      "status": "pending"
+    },
+    {
+      "id": "demo-003",
+      "title": "示例年份异常（待核实）",
+      "authors": "待核实",
+      "year": "20xx",
+      "journal": "待核实",
+      "doi": "待核实",
+      "abstract": "占位，用于验证年份校验。",
+      "source": "待核实",
+      "status": "pending"
+    }
+  ]
+}

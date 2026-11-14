@@ -1,0 +1,16 @@
+# Python 缓存
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+
+# 虚拟环境
+.venv/
+venv/
+
+# 运行产物（可由源码与样例重新生成）
+outputs/
+
+# 本地系统/编辑器
+.DS_Store
+Thumbs.db

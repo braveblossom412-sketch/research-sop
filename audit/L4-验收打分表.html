@@ -1,0 +1,114 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>research-sop · L4 验收打分表</title>
+<style>
+  :root{--bg:#f5f6f8;--card:#fff;--ink:#1a1d23;--sub:#5b616e;--line:#e6e8ec;--blue:#2563eb;--green:#16a34a}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:"Microsoft YaHei","Segoe UI",system-ui,sans-serif;background:var(--bg);color:var(--ink)}
+  header{padding:20px 26px;background:#111827;color:#fff}
+  header h1{margin:0 0 6px;font-size:20px}
+  header .meta{color:#cbd2dc;font-size:13px}
+  .wrap{max-width:1080px;margin:0 auto;padding:22px 26px}
+  .note{background:#fff7ed;border:1px solid #fed7aa;border-radius:12px;padding:14px 16px;font-size:13px;line-height:1.7;margin-bottom:18px}
+  table{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden;font-size:13px}
+  th,td{padding:12px 14px;border-bottom:1px solid var(--line);vertical-align:top;text-align:left}
+  th{background:#f3f5f8;color:var(--sub)}
+  .score{white-space:nowrap}
+  .score span{display:inline-block;border:1px solid var(--line);border-radius:6px;padding:3px 9px;margin-right:4px;color:var(--sub)}
+  a{color:var(--blue);text-decoration:none}
+  a:hover{text-decoration:underline}
+  code{background:#f0f2f5;border-radius:4px;padding:1px 5px;font-size:12px}
+  .tip{color:var(--sub);font-size:12px}
+  footer{margin-top:18px;color:var(--sub);font-size:12px;line-height:1.7}
+</style>
+</head>
+<body>
+<header>
+  <h1>research-sop · L4 真人验收打分表</h1>
+  <div class="meta">项目：课题组科研交付系统（生物医学 · 文献员）｜ 打分人：你（PI，项目负责人）｜ 验收线：每项 ≥4 分通过</div>
+</header>
+<div class="wrap">
+
+  <div class="note">
+    <b>怎么打分：</b>点开每项后面的产物链接试用/查看，按「好不好用」打 1–5 分（5 最好，<b>≥4 分算通过</b>）。打完把 6 项分数报给我，或直接在本表分数栏写数字，我回填到项目台账。<br>
+    <b>名词：</b>L4＝真人试用验收；CLI＝命令行入口（黑窗口敲命令跑程序）；golden-set＝验收基准样本库；DOI＝论文唯一编号（论文身份证号，可点回原文核对）；token＝模型计费的字数/算力单位。
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th style="width:13%">任务</th>
+        <th style="width:30%">看什么 / 怎么试用</th>
+        <th style="width:32%">产物链接</th>
+        <th style="width:25%">打分（1–5，≥4 通过）</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><b>TASK-001</b><br>骨架 CLI</td>
+        <td>能否跑通一次「提交文献 → 解析 → 入库」；字段是否齐全、小改即用。</td>
+        <td>
+          命令行入口：<a href="../src/literature/cli.py">cli.py</a><br>
+          演示数据：<a href="../src/samples/demo.json">demo.json</a> ｜ <a href="../src/samples/demo.csv">demo.csv</a><br>
+          入库结果：<a href="../src/data/lit.jsonl">lit.jsonl</a>
+        </td>
+        <td class="score">评分：<span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><br><span class="tip">备注：</span></td>
+      </tr>
+      <tr>
+        <td><b>TASK-002</b><br>角色卡 + 样本规范</td>
+        <td>文献员角色职责是否清楚；golden-set（基准样本库）规范是否可执行。</td>
+        <td>
+          角色卡：<a href="../roles/literature-clerk.md">literature-clerk.md</a><br>
+          样本规范：<a href="../golden-set/SPEC.md">SPEC.md</a> ｜ <a href="../golden-set/README.md">README.md</a>
+        </td>
+        <td class="score">评分：<span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><br><span class="tip">备注：</span></td>
+      </tr>
+      <tr>
+        <td><b>TASK-003</b><br>去重结果</td>
+        <td>重复判定理由（match_reason）是否合理；有没有把不同文献误合并（误杀）。</td>
+        <td>
+          去重后：<a href="../outputs/deduped-20261112.jsonl">deduped.jsonl</a><br>
+          重复对：<a href="../outputs/duplicates-20261112.jsonl">duplicates.jsonl</a>
+        </td>
+        <td class="score">评分：<span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><br><span class="tip">备注：</span></td>
+      </tr>
+      <tr>
+        <td><b>TASK-004</b><br>对比矩阵</td>
+        <td>文献对比矩阵表格在组会上是否一眼看得懂、可读。</td>
+        <td>
+          表格：<a href="../outputs/lit-matrix-20261112.xlsx">lit-matrix.xlsx</a><br>
+          同内容 CSV：<a href="../outputs/lit-matrix-20261112.csv">lit-matrix.csv</a>
+        </td>
+        <td class="score">评分：<span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><br><span class="tip">备注：</span></td>
+      </tr>
+      <tr>
+        <td><b>TASK-005</b><br>校验汇总</td>
+        <td>引用可核性通过率是否一眼可读；通过/失败/待核实分得清。</td>
+        <td>
+          汇总：<a href="../outputs/verification-summary-20261112.md">verification-summary.md</a><br>
+          明细：<a href="../outputs/verification-20261112.jsonl">verification.jsonl</a>
+        </td>
+        <td class="score">评分：<span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><br><span class="tip">备注：</span></td>
+      </tr>
+      <tr>
+        <td><b>TASK-006</b><br>日报 / 周报</td>
+        <td>读完 3 分钟内能否判断「要不要出手」；失败有没有被美化。</td>
+        <td>
+          日报：<a href="../audit/daily-20261112.md">daily-20261112.md</a><br>
+          周报：<a href="../audit/weekly-2026-W46.md">weekly-W46.md</a>
+        </td>
+        <td class="score">评分：<span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><br><span class="tip">备注：</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <footer>
+    现状：6 张任务卡代码骨架与测试已跑通（冒烟级），L1/L2/L3 机器校验已过，全部停在 L4 待你打分。<br>
+    另两项 C 档前置：① 提供真实论文 DOI/PDF 把基准样本库升到正式级（≥20 条）；② 是否授权对正式样本做联网校验。详见 <a href="pending-20261112.md">pending-20261112.md</a>。
+  </footer>
+</div>
+</body>
+</html>

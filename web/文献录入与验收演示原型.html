@@ -1,0 +1,257 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>文献员工作台 · 演示原型</title>
+<style>
+  :root{
+    --bg:#f4f5f7; --card:#fff; --ink:#1b1f27; --sub:#5d6470; --line:#e4e7ec;
+    --blue:#2563eb; --green:#16a34a; --yellow:#d97706; --red:#dc2626; --gray:#9ca3af;
+    --chip:#eef2f7;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:"Microsoft YaHei","Segoe UI",system-ui,sans-serif;background:var(--bg);color:var(--ink)}
+  header{padding:18px 24px;background:#101828;color:#fff;display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
+  header h1{font-size:18px;margin:0}
+  header .meta{color:#c3cbd8;font-size:12px}
+  nav{display:flex;gap:6px;padding:0 24px;background:#101828}
+  nav button{background:transparent;border:0;color:#c3cbd8;padding:12px 16px;font-size:14px;cursor:pointer;border-bottom:2px solid transparent}
+  nav button.active{color:#fff;border-bottom-color:var(--blue)}
+  .wrap{max-width:1080px;margin:0 auto;padding:22px 24px}
+  .note{background:#fffbeb;border:1px solid #fde68a;border-radius:10px;padding:12px 14px;font-size:13px;color:#7c5a10;margin-bottom:18px;line-height:1.6}
+  .grid-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px}
+  @media(max-width:768px){.grid-stats{grid-template-columns:repeat(2,1fr)}}
+  .stat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px}
+  .stat .n{font-size:22px;font-weight:700}
+  .stat .l{font-size:12px;color:var(--sub);margin-top:2px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-bottom:16px}
+  .card h2{font-size:15px;margin:0 0 12px}
+  form .fields{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  @media(max-width:600px){form .fields{grid-template-columns:1fr}}
+  label{font-size:13px;color:var(--sub);display:block;margin-bottom:4px}
+  input,textarea,select{width:100%;padding:10px;border:1px solid var(--line);border-radius:8px;font-size:15px;font-family:inherit;background:#fff}
+  textarea{resize:vertical}
+  .full{grid-column:1/-1}
+  .actions{margin-top:14px;display:flex;gap:10px;flex-wrap:wrap}
+  button.primary{background:var(--blue);color:#fff;border:0;border-radius:8px;padding:10px 18px;font-size:14px;cursor:pointer}
+  button.ghost{background:var(--chip);border:1px solid var(--line);border-radius:8px;padding:10px 16px;font-size:14px;cursor:pointer}
+  .drop{border:2px dashed var(--line);border-radius:12px;padding:26px;text-align:center;color:var(--sub);font-size:13px;margin-top:14px}
+  .drop.over{border-color:var(--blue);background:#f0f5ff}
+  table{width:100%;border-collapse:collapse;font-size:13px;table-layout:fixed}
+  th,td{padding:10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top;word-break:break-word}
+  th{color:var(--sub);font-weight:600;background:#f7f8fa}
+  .dot{display:inline-block;width:10px;height:10px;border-radius:50%}
+  .g{background:var(--green)} .y{background:var(--yellow)} .r{background:var(--red)} .gray{background:var(--gray)}
+  .score-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .score-row .opt{border:1px solid var(--line);border-radius:6px;padding:5px 11px;cursor:pointer;font-size:13px;color:var(--sub)}
+  .score-row .opt.on{background:var(--blue);color:#fff;border-color:var(--blue)}
+  .score-row .pass{font-size:12px;color:var(--sub)}
+  .toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%);background:#101828;color:#fff;padding:10px 18px;border-radius:10px;font-size:13px;opacity:0;pointer-events:none;transition:opacity .2s}
+  .toast.show{opacity:1}
+  .view{display:none}
+  .view.active{display:block}
+  .muted{color:var(--sub);font-size:12px}
+</style>
+</head>
+<body>
+<header>
+  <h1>文献员工作台（research-sop）</h1>
+  <div class="meta">演示原型 · 数据为占位样例，非真实文献 ｜ 正式后端接入见 TASK-007</div>
+</header>
+<nav>
+  <button data-view="entry" class="active">录入论文</button>
+  <button data-view="board">结果看板</button>
+  <button data-view="review">验收打分</button>
+</nav>
+
+<div class="wrap">
+
+  <!-- ===== 视图：录入 ===== -->
+  <section id="view-entry" class="view active">
+    <div class="note">界面草图（非可交付 DEMO）：本页只确认交互与排版，填入内容只在浏览器内存中，不落库、不联网、不可复现。正式 M1 版本由 TASK-007 接后端 API，前端调真实引擎，内置可复现样例，产物落 outputs/audit。</div>
+    <div class="card">
+      <h2>逐条录入论文</h2>
+      <form id="entry-form">
+        <div class="fields">
+          <div><label>标题 *</label><input id="f-title" required placeholder="论文标题"></div>
+          <div><label>作者</label><input id="f-authors" placeholder="多位作者用 ; 分隔"></div>
+          <div><label>年份</label><input id="f-year" placeholder="如 2023"></div>
+          <div><label>期刊 / 会议</label><input id="f-journal"></div>
+          <div><label>DOI（论文编号）</label><input id="f-doi" placeholder="可留空，缺 DOI 按标题+年份匹配"></div>
+          <div><label>来源库</label><input id="f-source" placeholder="可点回原始来源"></div>
+          <div class="full"><label>摘要</label><textarea id="f-abstract" rows="3" placeholder="主要内容摘要，用于提取主要结论"></textarea></div>
+        </div>
+        <div class="actions">
+          <button type="submit" class="primary">加入录入清单</button>
+          <button type="button" class="ghost" id="btn-demo">填入演示样例</button>
+        </div>
+      </form>
+      <div class="drop" id="drop">拖拽 CSV / JSON 文件到这里批量导入（原型仅解析文件名与行数）</div>
+    </div>
+    <div class="card">
+      <h2>本批待入库清单 <span class="muted" id="entry-count"></span></h2>
+      <table>
+        <colgroup><col style="width:18%"><col style="width:34%"><col style="width:14%"><col style="width:18%"><col style="width:16%"></colgroup>
+        <thead><tr><th>编号</th><th>标题</th><th>年份</th><th>DOI</th><th>状态</th></tr></thead>
+        <tbody id="entry-tbody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ===== 视图：看板 ===== -->
+  <section id="view-board" class="view">
+    <div class="grid-stats">
+      <div class="stat"><div class="n" id="s-total">8</div><div class="l">录入总数</div></div>
+      <div class="stat"><div class="n" style="color:var(--green)" id="s-imported">4</div><div class="l">入库（去重后）</div></div>
+      <div class="stat"><div class="n" style="color:var(--yellow)" id="s-dup">4</div><div class="l">重复被合并</div></div>
+      <div class="stat"><div class="n" style="color:var(--gray)" id="s-pending">4</div><div class="l">待核实</div></div>
+    </div>
+
+    <div class="card">
+      <h2>去重结果</h2>
+      <table>
+        <colgroup><col style="width:16%"><col style="width:16%"><col style="width:42%"><col style="width:14%"><col style="width:12%"></colgroup>
+        <thead><tr><th>保留条目</th><th>被合并</th><th>匹配理由</th><th>相似度</th><th>判定</th></tr></thead>
+        <tbody id="dup-tbody"></tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>对比矩阵（同 XLSX 列序，空值统一「待核实」）</h2>
+      <table>
+        <colgroup><col style="width:6%"><col style="width:24%"><col style="width:14%"><col style="width:9%"><col style="width:16%"><col style="width:16%"><col style="width:15%"></colgroup>
+        <thead><tr><th>序号</th><th>标题</th><th>第一作者</th><th>年份</th><th>期刊/会议</th><th>DOI</th><th>主要结论</th></tr></thead>
+        <tbody id="matrix-tbody"></tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>引用可核校验汇总</h2>
+      <div class="score-row">
+        <span>通过 <b id="v-ok">0</b></span>
+        <span>失败 <b id="v-fail">0</b></span>
+        <span>待核实 <b id="v-pending">4</b></span>
+        <span class="pass">通过率 <b id="v-rate">0.0%</b>（占位样例不联网校验）</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 视图：打分 ===== -->
+  <section id="view-review" class="view">
+    <div class="note">每项在页面内直接试用/查看后打分，1–5 分，≥4 分通过。原型分数只在页面留存，不回写台账；TASK-007 接入后分数自动记入项目验收记录。</div>
+    <div class="card" id="review-list"></div>
+    <div class="actions">
+      <button class="primary" id="btn-submit-score">提交本批打分</button>
+      <span class="muted" id="score-summary"></span>
+    </div>
+  </section>
+
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const PLACEHOLDER = "待核实";
+// 演示数据（与现有 lit.jsonl 字段一致，全部为占位，非真实文献）
+const DEMO = [
+  {id:"demo-001", title:"示例文献（待核实）", authors:"待核实", year:"2023", journal:"待核实", doi:"待核实", abstract:"占位摘要，非真实文献，待替换为可溯源样本。", source:"待核实"},
+  {id:"demo-002", title:"示例缺 DOI（待核实）", authors:"待核实", year:"2021", journal:"待核实", doi:"", abstract:"占位，用于验证缺 DOI 边界。", source:"待核实"},
+  {id:"csv-001", title:"CSV 示例文献（待核实）", authors:"待核实", year:"2022", journal:"待核实", doi:"待核实", abstract:"占位摘要 非真实文献", source:"待核实"},
+  {id:"csv-002", title:"CSV 示例缺 DOI（待核实）", authors:"待核实", year:"2020", journal:"待核实", doi:"", abstract:"占位用于验证缺 DOI 边界", source:"待核实"}
+];
+const DUP = [
+  {kept:"demo-001", dropped:"demo-001（二次导入）", reason:"编号相同（重复导入）", score:"1.00", ok:true},
+  {kept:"demo-002", dropped:"demo-002（二次导入）", reason:"编号相同（重复导入）", score:"1.00", ok:true},
+  {kept:"csv-001", dropped:"csv-001（二次导入）", reason:"编号相同（重复导入）", score:"1.00", ok:true},
+  {kept:"csv-002", dropped:"csv-002（二次导入）", reason:"编号相同（重复导入）", score:"1.00", ok:true}
+];
+const REVIEW = [
+  {id:"TASK-001", name:"骨架录入流程", desc:"能否跑通一次「提交 → 解析 → 入库」，字段齐全、小改即用。"},
+  {id:"TASK-002", name:"角色卡与样本规范", desc:"文献员职责是否清楚；基准样本规范是否可执行。"},
+  {id:"TASK-003", name:"去重结果", desc:"重复判定理由是否合理，有没有把不同文献误合并。"},
+  {id:"TASK-004", name:"对比矩阵", desc:"矩阵表格在组会上是否一眼看得懂。"},
+  {id:"TASK-005", name:"校验汇总", desc:"通过/失败/待核实是否分得清，通过率一眼可读。"},
+  {id:"TASK-006", name:"日报 / 周报", desc:"3 分钟内能否判断要不要出手，失败有没有被美化。"}
+];
+
+let entries = DEMO.map((d,i)=>({...d, status:"待入库"}));
+let scores = {};
+
+function toast(msg){const t=document.getElementById("toast");t.textContent=msg;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),1800);}
+
+// 路由
+document.querySelectorAll("nav button").forEach(b=>{
+  b.addEventListener("click",()=>{
+    document.querySelectorAll("nav button").forEach(x=>x.classList.remove("active"));
+    document.querySelectorAll(".view").forEach(x=>x.classList.remove("active"));
+    b.classList.add("active");
+    document.getElementById("view-"+b.dataset.view).classList.add("active");
+  });
+});
+
+// 录入清单
+function renderEntries(){
+  const tb=document.getElementById("entry-tbody");
+  document.getElementById("entry-count").textContent="（"+entries.length+" 条）";
+  tb.innerHTML=entries.map((e,i)=>`<tr>
+    <td>${e.id||"—"}</td><td>${e.title||PLACEHOLDER}</td><td>${e.year||PLACEHOLDER}</td>
+    <td>${e.doi||PLACEHOLDER}</td><td><span class="dot gray"></span> ${e.status}</td></tr>`).join("");
+}
+document.getElementById("entry-form").addEventListener("submit",ev=>{
+  ev.preventDefault();
+  const rec={id:"new-"+(entries.length+1), title:f("title"), authors:f("authors"), year:f("year"), journal:f("journal"), doi:f("doi"), abstract:f("abstract"), source:f("source"), status:"待入库"};
+  entries.push(rec); renderEntries(); ev.target.reset(); toast("已加入本批清单（原型未入库）");
+});
+function f(id){return document.getElementById("f-"+id).value.trim();}
+document.getElementById("btn-demo").addEventListener("click",()=>{entries=entries.concat(DEMO);renderEntries();toast("已追加演示样例");});
+
+const drop=document.getElementById("drop");
+["dragover","dragenter"].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.add("over");}));
+["dragleave","drop"].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.remove("over");}));
+drop.addEventListener("drop",e=>{
+  const files=e.dataTransfer.files;
+  if(files.length){toast("已收到 "+files.length+" 个文件（原型仅演示导入入口）");}
+});
+
+// 看板
+function renderBoard(){
+  document.getElementById("dup-tbody").innerHTML=DUP.map(d=>`<tr>
+    <td>${d.kept}</td><td>${d.dropped}</td><td>${d.reason}</td><td>${d.score}</td>
+    <td><span class="dot ${d.ok?"g":"r"}"></span> 无误杀</td></tr>`).join("");
+  document.getElementById("matrix-tbody").innerHTML=DEMO.map((d,i)=>`<tr>
+    <td>${i+1}</td><td>${d.title}</td><td>${d.authors}</td><td>${d.year}</td><td>${d.journal}</td><td>${d.doi||PLACEHOLDER}</td><td>${d.abstract}</td></tr>`).join("");
+}
+
+// 打分
+function renderReview(){
+  document.getElementById("review-list").innerHTML=REVIEW.map(r=>`
+    <div class="card" style="margin-bottom:12px">
+      <h2>${r.id} · ${r.name}</h2>
+      <div class="muted" style="margin-bottom:10px">${r.desc}</div>
+      <div class="score-row" data-id="${r.id}">
+        ${[1,2,3,4,5].map(n=>`<span class="opt" data-n="${n}">${n}</span>`).join("")}
+        <span class="pass">≥4 通过</span>
+      </div>
+    </div>`).join("");
+  document.querySelectorAll(".score-row").forEach(row=>{
+    row.querySelectorAll(".opt").forEach(o=>o.addEventListener("click",()=>{
+      row.querySelectorAll(".opt").forEach(x=>x.classList.remove("on"));
+      o.classList.add("on"); scores[row.dataset.id]=Number(o.dataset.n);
+      updateScoreSummary();
+    }));
+  });
+}
+function updateScoreSummary(){
+  const done=Object.keys(scores).length;
+  const pass=Object.values(scores).filter(v=>v>=4).length;
+  document.getElementById("score-summary").textContent=`已评 ${done}/${REVIEW.length}，通过 ${pass} 项`;
+}
+document.getElementById("btn-submit-score").addEventListener("click",()=>{
+  if(Object.keys(scores).length<REVIEW.length){toast("还有项目未打分");return;}
+  toast("原型：打分已记录在本页，正式版回写验收台账");
+});
+
+renderEntries(); renderBoard(); renderReview();
+</script>
+</body>
+</html>

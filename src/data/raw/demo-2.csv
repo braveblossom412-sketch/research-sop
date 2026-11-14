@@ -1,0 +1,4 @@
+id,title,authors,year,journal,doi,abstract,source,status,imported_at
+csv-001,CSV 示例文献（待核实）,待核实,2022,待核实,待核实,占位摘要 非真实文献,待核实,pending,
+csv-002,CSV 示例缺 DOI（待核实）,待核实,2020,待核实,,占位用于验证缺 DOI 边界,待核实,pending,
+csv-003,CSV 示例年份异常（待核实）,待核实,20xy,待核实,待核实,占位用于验证年份校验,待核实,pending,

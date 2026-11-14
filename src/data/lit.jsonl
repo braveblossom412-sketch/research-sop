@@ -1,0 +1,8 @@
+{"id": "demo-001", "title": "示例文献（待核实）", "year": "2023", "status": "pending", "authors": "待核实", "journal": "待核实", "doi": "待核实", "abstract": "占位摘要，非真实文献，待替换为可溯源样本。", "source": "待核实", "imported_at": "2026-11-12T14:35:41.674313+00:00"}
+{"id": "demo-002", "title": "示例缺 DOI（待核实）", "year": "2021", "status": "pending", "authors": "待核实", "journal": "待核实", "doi": null, "abstract": "占位，用于验证缺 DOI 边界。", "source": "待核实", "imported_at": "2026-11-12T14:35:41.674313+00:00"}
+{"id": "demo-001", "title": "示例文献（待核实）", "year": "2023", "status": "pending", "authors": "待核实", "journal": "待核实", "doi": "待核实", "abstract": "占位摘要，非真实文献，待替换为可溯源样本。", "source": "待核实", "imported_at": "2026-11-12T14:35:54.310648+00:00"}
+{"id": "demo-002", "title": "示例缺 DOI（待核实）", "year": "2021", "status": "pending", "authors": "待核实", "journal": "待核实", "doi": null, "abstract": "占位，用于验证缺 DOI 边界。", "source": "待核实", "imported_at": "2026-11-12T14:35:54.310648+00:00"}
+{"id": "csv-001", "title": "CSV 示例文献（待核实）", "year": "2022", "status": "pending", "authors": "待核实", "journal": "待核实", "doi": "待核实", "abstract": "占位摘要 非真实文献", "source": "待核实", "imported_at": ""}
+{"id": "csv-002", "title": "CSV 示例缺 DOI（待核实）", "year": "2020", "status": "pending", "authors": "待核实", "journal": "待核实", "doi": "", "abstract": "占位用于验证缺 DOI 边界", "source": "待核实", "imported_at": ""}
+{"id": "csv-001", "title": "CSV 示例文献（待核实）", "year": "2022", "status": "pending", "authors": "待核实", "journal": "待核实", "doi": "待核实", "abstract": "占位摘要 非真实文献", "source": "待核实", "imported_at": ""}
+{"id": "csv-002", "title": "CSV 示例缺 DOI（待核实）", "year": "2020", "status": "pending", "authors": "待核实", "journal": "待核实", "doi": "", "abstract": "占位用于验证缺 DOI 边界", "source": "待核实", "imported_at": ""}

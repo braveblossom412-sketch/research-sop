@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>research-sop · 文献交付工作台</title>
+<style>
+:root{--bg:#f5f6f8;--card:#fff;--line:#e3e6ea;--ink:#1c2330;--sub:#5b6572;--accent:#2f5d8a;--ok:#1f8a5b;--warn:#b8860b;--bad:#b3402f;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,"Segoe UI","Microsoft YaHei",sans-serif;line-height:1.55}
+.wrap{max-width:1120px;margin:0 auto;padding:22px 18px 60px}
+.top{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin-bottom:6px}
+h1{font-size:21px;margin:0}
+.kicker{background:#fff;border:1px solid var(--line);border-radius:999px;padding:3px 10px;color:var(--sub);font-size:12px}
+.note{background:#fff7e6;border:1px solid #f0d9a8;color:#7a5a10;padding:10px 14px;border-radius:8px;font-size:13px;margin:12px 0}
+.intro p{margin:0}
+.intro .lead{font-size:15px;color:var(--ink);font-weight:600}
+.intro .pillars{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px;margin:10px 0}
+.intro .pillars div{background:#fffdf7;border:1px solid #f0e0bf;border-radius:8px;padding:8px 10px}
+.intro .pillars b{display:block;color:var(--ink);margin-bottom:2px}
+.intro .pillars span{font-size:12px;color:#7a5a10}
+.intro .foot{font-size:12px;color:#7a5a10}
+.bar{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin:14px 0}
+select,button{font:inherit;padding:8px 12px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--ink)}
+button{cursor:pointer;background:var(--accent);color:#fff;border-color:var(--accent)}
+button.ghost{background:#fff;color:var(--accent)}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin:16px 0}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px}
+.card .num{font-size:25px;font-weight:700}
+.card .lab{color:var(--sub);font-size:13px;margin-top:2px}
+.tabs{display:flex;flex-wrap:wrap;gap:6px;margin:16px 0 0}
+.tab{background:#fff;border:1px solid var(--line);border-radius:8px 8px 0 0;padding:9px 14px;cursor:pointer;color:var(--sub)}
+.tab.active{color:var(--accent);border-bottom-color:#fff;font-weight:600}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:0 10px 10px 10px;padding:16px 18px;margin-top:0}
+table{border-collapse:collapse;width:100%;font-size:13px;table-layout:fixed}
+th,td{border-bottom:1px solid var(--line);padding:8px 10px;text-align:left;word-break:break-word}
+th{color:var(--sub);font-weight:600}
+.muted{color:var(--sub);font-size:13px}
+.tag{display:inline-block;padding:2px 8px;border-radius:10px;font-size:12px}
+.pending{background:#fdeecd;color:var(--warn)}
+.ok{background:#e6f4ec;color:var(--ok)}
+.bad{background:#fbe7e4;color:var(--bad)}
+.hidden{display:none}
+textarea{width:100%;min-height:150px;font:inherit;padding:10px;border:1px solid var(--line);border-radius:8px}
+.alert{padding:10px 14px;border-radius:8px;margin:10px 0;font-size:13px}
+.alert.err{background:#fbe7e4;color:var(--bad)}
+.alert.ok{background:#e6f4ec;color:var(--ok)}
+.grid-scroll{overflow-x:auto}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <h1>research-sop · 文献交付工作台</h1>
+    <span class="kicker">课题组科研交付系统 ｜ 生物医学 · 文献员</span>
+  </div>
+  <div class="note intro">
+    <p class="lead">把零散的文献题录（JSON / CSV），变成可直接组会讨论、每条都能点回原文的对比矩阵。</p>
+    <div class="pillars">
+      <div><b>结构化入库</b><span>字段级校验；缺失一律标「待核实」，不编造。</span></div>
+      <div><b>去重可追溯</b><span>DOI 唯一键 + 标题相似度；重复只标记、不删除。</span></div>
+      <div><b>引用可核</b><span>DOI 内容协商校验；失败标「待核实」，不判「不存在」。</span></div>
+    </div>
+    <p class="foot">本地离线运行、数据不外发；当前加载演示与冒烟样本，<b>正式验收集另行标注</b>。全程留痕：原档 → 结构化字段 → 去重记录 → 校验结果，可逐条复核。</p>
+  </div>
+
+  <div class="bar">
+    <label class="muted">数据源
+      <select id="source"></select>
+    </label>
+    <button id="reload" class="ghost">刷新</button>
+    <span class="muted" id="src-count"></span>
+  </div>
+
+  <div class="cards" id="cards"></div>
+
+  <div class="tabs" id="tabs">
+    <div class="tab active" data-view="records">记录列表</div>
+    <div class="tab" data-view="dedup">去重分流</div>
+    <div class="tab" data-view="matrix">对比矩阵</div>
+    <div class="tab" data-view="verify">校验明细</div>
+    <div class="tab" data-view="ingest">录入演示</div>
+  </div>
+
+  <div class="panel">
+    <section id="view-records"></section>
+    <section id="view-dedup" class="hidden"></section>
+    <section id="view-matrix" class="hidden"></section>
+    <section id="view-verify" class="hidden"></section>
+    <section id="view-ingest" class="hidden"></section>
+  </div>
+</div>
+
+<script>
+const state = { source:"lit", records:[], deduped:[], duplicates:[], matrix:{columns:[],rows:[]}, verify:{results:[],summary:{}} };
+
+function esc(v){ return v===null||v===undefined?"":String(v).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
+
+async function fetchJSON(url, opts){
+  const r = await fetch(url, opts);
+  return r.json();
+}
+
+async function loadSources(){
+  const s = await fetchJSON("/api/sources");
+  const sel = document.getElementById("source");
+  sel.innerHTML = s.sources.map(x=>`<option value="${esc(x.key)}">${esc(x.label)}（${x.count}）</option>`).join("");
+  sel.onchange = ()=>{ state.source = sel.value; loadAll(); };
+}
+
+async function loadAll(){
+  const q = "?source=" + encodeURIComponent(state.source);
+  const [rec, ded, mat, ver] = await Promise.all([
+    fetchJSON("/api/records"+q),
+    fetchJSON("/api/dedup"+q),
+    fetchJSON("/api/matrix"+q),
+    fetchJSON("/api/verify"+q),
+  ]);
+  state.records = rec.records; state.deduped = ded.deduped; state.duplicates = ded.duplicates;
+  state.matrix = mat; state.verify = ver;
+  document.getElementById("src-count").textContent = `共 ${rec.count} 条`;
+  renderCards(ded, ver); renderRecords(); renderDedup(); renderMatrix(); renderVerify();
+}
+
+function renderCards(ded, ver){
+  const s = ver.summary;
+  const cards = [
+    ["提交条目", state.records.length, ""],
+    ["去重保留", ded.deduped, "var(--accent)"],
+    ["标记重复", ded.duplicates, "var(--warn)"],
+    ["校验通过", s.ok, "var(--ok)"],
+    ["校验待核实", s.pending, "var(--warn)"],
+    ["通过率", (s.pass_rate*100).toFixed(1)+"%", ""],
+  ];
+  document.getElementById("cards").innerHTML = cards.map(([lab,num,col])=>
+    `<div class="card"><div class="num" style="${col?`color:${col}`:""}">${esc(num)}</div><div class="lab">${esc(lab)}</div></div>`).join("");
+}
+
+function renderRecords(){
+  const rows = state.records.map((r,i)=>`<tr>
+    <td>${esc(i+1)}</td><td>${esc(r.title)}</td><td>${esc(r.authors)}</td><td>${esc(r.year)}</td>
+    <td>${esc(r.journal)}</td><td>${esc(r.doi)}</td><td>${esc(r.source)}</td></tr>`).join("")
+    || `<tr><td colspan="7" class="muted">无记录</td></tr>`;
+  document.getElementById("view-records").innerHTML =
+    `<div class="grid-scroll"><table><thead><tr><th>序</th><th>标题</th><th>作者</th><th>年份</th><th>期刊/会议</th><th>DOI</th><th>来源</th></tr></thead><tbody>${rows}</tbody></table></div>`;
+}
+
+function renderDedup(){
+  const d = state.duplicates.map(x=>`<tr>
+    <td>${esc(x.kept_id)}</td><td>${esc(x.dropped_id)}</td><td>${esc(x.match_reason)}</td><td>${esc(x.score)}</td></tr>`).join("")
+    || `<tr><td colspan="4" class="muted">无重复条目</td></tr>`;
+  document.getElementById("view-dedup").innerHTML =
+    `<p class="muted">去重为标记 + 分流，不物理删除；DOI 为唯一键，无 DOI 按标题相似度匹配（阈值 0.92）。</p>
+    <div class="grid-scroll"><table><thead><tr><th>保留条目</th><th>重复条目</th><th>匹配理由</th><th>相似度</th></tr></thead><tbody>${d}</tbody></table></div>`;
+}
+
+function renderMatrix(){
+  const cols = state.matrix.columns;
+  const head = cols.map(c=>`<th>${esc(c)}</th>`).join("");
+  const body = state.matrix.rows.map(r=>"<tr>"+r.map(c=>`<td>${esc(c)}</td>`).join("")+"</tr>").join("")
+    || `<tr><td colspan="${cols.length}" class="muted">无矩阵行</td></tr>`;
+  document.getElementById("view-matrix").innerHTML =
+    `<p class="muted">列序与导出的 CSV/XLSX 一致；schema 未定义字段统一标「待核实」，未编造。</p>
+    <div class="grid-scroll"><table><thead><tr>${head}</tr></thead><tbody>${body}</tbody></table></div>`;
+}
+
+function renderVerify(){
+  const s = state.verify.summary;
+  const rows = state.verify.results.map(r=>{
+    const tag = r.status==="ok"?'<span class="tag ok">通过</span>':r.status==="failed"?'<span class="tag bad">失败</span>':'<span class="tag pending">待核实</span>';
+    return `<tr><td>${esc(r.doi)}</td><td>${tag}</td><td>${esc(r.title_match)}</td><td>${esc(r.error)}</td></tr>`;
+  }).join("") || `<tr><td colspan="4" class="muted">无校验记录</td></tr>`;
+  document.getElementById("view-verify").innerHTML =
+    `<p class="muted">总数 ${s.total} · 通过 ${s.ok} · 失败 ${s.failed} · 待核实 ${s.pending} · 通过率 ${(s.pass_rate*100).toFixed(1)}%。联网校验需单独授权后开启。</p>
+    <div class="grid-scroll"><table><thead><tr><th>DOI</th><th>状态</th><th>标题匹配</th><th>原因</th></tr></thead><tbody>${rows}</tbody></table></div>`;
+}
+
+function renderIngest(){
+  const el = document.getElementById("view-ingest");
+  el.innerHTML = `
+    <p class="muted">粘贴 JSON 数组（字段：id、title、year、status 必填；authors/journal/doi/abstract/source 可选）。提交后走与命令行一致的校验与归一化，结果写入独立演示文件，不覆盖既有库存。</p>
+    <textarea id="ingest-input" placeholder='[{"id":"demo-004","title":"粘贴示例标题","year":"2024","status":"new"}]'></textarea>
+    <div class="bar">
+      <button id="ingest-go">提交校验</button>
+      <button id="ingest-fill" class="ghost">填入示例</button>
+    </div>
+    <div id="ingest-out"></div>`;
+  document.getElementById("ingest-fill").onclick = ()=>{
+    document.getElementById("ingest-input").value = JSON.stringify([
+      {id:"demo-004",title":"录入校验示例（待核实）",year:"2024",status:"new",authors:"待核实",doi:"待核实"},
+      {id:"demo-005",title":"缺年份示例（待核实）",status:"new"},
+    ], null, 2);
+  };
+  document.getElementById("ingest-go").onclick = async ()=>{
+    const out = document.getElementById("ingest-out");
+    let records;
+    try{ records = JSON.parse(document.getElementById("ingest-input").value); }
+    catch(e){ out.innerHTML = `<div class="alert err">JSON 解析失败：${esc(e.message)}</div>`; return; }
+    const res = await fetchJSON("/api/ingest", {method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({records})});
+    if(res.error){ out.innerHTML = `<div class="alert err">${esc(res.error)}</div>`; return; }
+    const errs = (res.errors||[]).map(e=>`<li>第 ${e.index} 条：${esc(e.errors.join("；"))}</li>`).join("") || "无";
+    out.innerHTML = `<div class="alert ok">提交 ${res.total} 条 · 入库 ${res.imported} · 拒绝 ${res.rejected}</div>
+      <div class="alert err">拒绝明细：<ul>${errs}</ul></div>`;
+    loadAll();
+  };
+}
+
+document.getElementById("tabs").addEventListener("click", e=>{
+  const t = e.target.closest(".tab"); if(!t) return;
+  document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
+  t.classList.add("active");
+  ["records","dedup","matrix","verify","ingest"].forEach(v=>
+    document.getElementById("view-"+v).classList.toggle("hidden", v!==t.dataset.view));
+});
+document.getElementById("reload").onclick = loadAll;
+
+loadSources().then(loadAll);
+renderIngest();
+</script>
+</body>
+</html>

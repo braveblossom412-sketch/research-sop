@@ -1,0 +1,126 @@
+{
+  "_note": "虚构演示样例，非真实文献，仅用于跑通管线与查看产物形态；所有来源/DOI 均为占位，正式验收需替换为可溯源样本。",
+  "records": [
+    {
+      "id": "P-001",
+      "title": "大模型在科研文献综述中的辅助生成方法",
+      "authors": "张伟; 李娜",
+      "year": "2024",
+      "journal": "人工智能与文献研究",
+      "doi": "待核实",
+      "abstract": "虚构样例：探讨大模型辅助归纳多篇文献结论的流程，含去重与结论截断规则。",
+      "source": "待核实",
+      "status": "pending"
+    },
+    {
+      "id": "P-002",
+      "title": "基于相似度的学术论文去重框架",
+      "authors": "王芳",
+      "year": "2023",
+      "journal": "数字图书馆",
+      "doi": "待核实",
+      "abstract": "虚构样例：按 DOI 唯一键、标题加年份模糊匹配两级分流，不物理删除重复条目。",
+      "source": "待核实",
+      "status": "pending"
+    },
+    {
+      "id": "P-003",
+      "title": "引用可核性校验在综述写作中的应用",
+      "authors": "陈静; 刘洋",
+      "year": "2025",
+      "journal": "信息科学",
+      "doi": "待核实",
+      "abstract": "虚构样例：对 DOI 做内容协商解析，失败一律标记待核实，不删除原始行。",
+      "source": "待核实",
+      "status": "pending"
+    },
+    {
+      "id": "P-004",
+      "title": "科研人员文献管理工具对比研究",
+      "authors": "赵敏",
+      "year": "2022",
+      "journal": "情报杂志",
+      "doi": "待核实",
+      "abstract": "虚构样例：对比本地库、标签与全文检索三类管理方式的效率与成本。",
+      "source": "待核实",
+      "status": "pending"
+    },
+    {
+      "id": "P-005",
+      "title": "摘要自动抽取方法综述",
+      "authors": "孙浩",
+      "year": "2021",
+      "journal": "中文信息学报",
+      "doi": "待核实",
+      "abstract": "虚构样例：归纳抽取式与生成式摘要方法的适用边界与误差来源。",
+      "source": "待核实",
+      "status": "pending"
+    },
+    {
+      "id": "P-006",
+      "title": "开放获取期刊影响力评估指标",
+      "authors": "周涛",
+      "year": "2020",
+      "journal": "出版研究",
+      "doi": "待核实",
+      "abstract": "虚构样例：讨论影响因子、被引次数与开放获取覆盖率之间的口径差异。",
+      "source": "待核实",
+      "status": "pending"
+    },
+    {
+      "id": "P-007",
+      "title": "跨语言文献检索的匹配策略",
+      "authors": "吴磊; 郑爽",
+      "year": "2023",
+      "journal": "图书馆论坛",
+      "doi": "待核实",
+      "abstract": "虚构样例：研究译名归一化与双语标题互补检索对召回率的影响。",
+      "source": "待核实",
+      "status": "pending"
+    },
+    {
+      "id": "P-008",
+      "title": "研究复现性标注体系初探",
+      "authors": "冯雪",
+      "year": "2019",
+      "journal": "科研评价",
+      "doi": "待核实",
+      "abstract": "虚构样例：提出可复现性分级标注，区分方法可得、数据可得与结果可复现。",
+      "source": "待核实",
+      "status": "pending"
+    },
+    {
+      "id": "P-009",
+      "title": "无 DOI 的会议论文条目",
+      "authors": "钱进",
+      "year": "2022",
+      "journal": "待核实",
+      "doi": null,
+      "abstract": "虚构样例：缺 DOI 边界用例，按标题加年份做模糊匹配。",
+      "source": "待核实",
+      "status": "pending"
+    },
+    {
+      "id": "P-010",
+      "title": "大模型在科研文献综述中的辅助生成方法研究",
+      "authors": "张伟; 李娜",
+      "year": "2024",
+      "journal": "人工智能与文献研究",
+      "doi": "待核实",
+      "abstract": "虚构样例：与 P-001 标题高度相似，用于验证标题相似度去重。",
+      "source": "待核实",
+      "status": "pending"
+    },
+    {
+      "id": "P-011",
+      "title": "",
+      "authors": "测试",
+      "year": "2024",
+      "journal": "待核实",
+      "doi": "待核实",
+      "abstract": "非法边界用例：缺标题，应被校验拒绝并计入 rejected。",
+      "source": "待核实",
+      "status": "pending"
+    }
+  ]
+}
